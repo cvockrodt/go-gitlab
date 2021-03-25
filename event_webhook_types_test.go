@@ -87,6 +87,37 @@ func TestIssueEventUnmarshal(t *testing.T) {
 	}
 }
 
+func TestIssueCommentEventUnmarshal(t *testing.T) {
+	jsonObject := loadFixture("testdata/webhooks/note_issue.json")
+
+	var event *IssueCommentEvent
+	err := json.Unmarshal(jsonObject, &event)
+
+	if err != nil {
+		t.Errorf("Issue Comment Event can not unmarshaled: %v\n ", err.Error())
+	}
+
+	if event.ObjectKind != string(NoteEventTargetType) {
+		t.Errorf("ObjectKind is %v, want %v", event.ObjectKind, NoteEventTargetType)
+	}
+
+	if event.ProjectID != 5 {
+		t.Errorf("ProjectID is %v, want %v", event.ProjectID, 5)
+	}
+
+	if event.ObjectAttributes.NoteableType != "Issue" {
+		t.Errorf("NoteableType is %v, want %v", event.ObjectAttributes.NoteableType, "Issue")
+	}
+
+	if event.Issue.Title != "test" {
+		t.Errorf("Issue title is %v, want %v", event.Issue.Title, "test")
+	}
+
+	if event.Issue.Labels[0] == nil || event.Issue.Labels[0].type == nil {
+		t.Errorf("Label type is null")
+	}
+}
+
 func TestMergeEventUnmarshal(t *testing.T) {
 	jsonObject := loadFixture("testdata/webhooks/merge_request.json")
 

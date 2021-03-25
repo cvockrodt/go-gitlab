@@ -136,6 +136,7 @@ func TestParseIssueCommentHook(t *testing.T) {
 	if event.Issue.Title != "test" {
 		t.Errorf("Issue title is %v, want %v", event.Issue.Title, "test")
 	}
+	assert.Equal(t, 2, len(event.Issue.Labels))
 }
 
 func TestParseIssueHook(t *testing.T) {
